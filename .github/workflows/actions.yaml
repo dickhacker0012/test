@@ -33,4 +33,5 @@ jobs:
       - name: Build Zed for Windows
         run: |
           cd ./zed
-          cargo run --release
+          # cargo run --release
+          cargo build
