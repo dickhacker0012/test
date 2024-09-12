@@ -1,0 +1,36 @@
+name: Build Zed for Windows
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install winget
+        run: ./install-winget.ps1
+
+      - name: Install Visual Studio build tools
+        run: |
+          # winget install Microsoft.VisualStudio.2022.Community --accept-source-agreements --accept-package-agreements --silent --override "--wait --quiet --add ProductLang En-us --add Microsoft.VisualStudio.Workload.NativeDesktop --add Microsoft.VisualStudio.Component.Windows10SDK --includeRecommended"
+          winget install Microsoft.VisualStudio.2022.Community --accept-source-agreements --accept-package-agreements --silent --override "--wait --quiet --add ProductLang En-us --add Microsoft.VisualStudio.Component.Windows10SDK"
+
+      - name: Install Rust
+        run: |
+          winget install Rustlang.Rustup --accept-source-agreements --accept-package-agreements
+          rustup update
+          rustup target add wasm32-wasip1
+          rustup --version
+          cargo --version
+
+      - name: Clone Repository
+        run: git clone https://github.com/zed-industries/zed.git
+
+      - name: Build Zed for Windows
+        run: |
+          cd ./zed
+          cargo run --release
