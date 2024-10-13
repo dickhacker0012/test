@@ -3,8 +3,8 @@ name: chrome remote desktop
 on:
   workflow_dispatch:
     inputs:
-      code:
-        description: "code"
+      auth_command:
+        description: "Auth command"
         required: true
 
 permissions:
@@ -25,8 +25,7 @@ jobs:
         run: winget.exe install -e --id Google.ChromeRemoteDesktopHost --accept-package-agreements --accept-source-agreements
 
       - name: Starting chrome remote desktop
-        run: |
-          & "${Env:PROGRAMFILES(X86)}\Google\Chrome Remote Desktop\CurrentVersion\remoting_start_host.exe" --code="${{ github.event.inputs.code }}" --redirect-url="https://remotedesktop.google.com/_/oauthredirect" --name=$Env:COMPUTERNAME
+        run: ${{ github.event.inputs.auth_command }} --pin="000000"
 
       - name: Keep alive
         run: |
