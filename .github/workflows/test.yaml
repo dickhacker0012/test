@@ -1,4 +1,4 @@
-name: a
+name: test
 
 on:
   workflow_dispatch:
@@ -19,6 +19,12 @@ jobs:
       - name: Install ngrok
         run: |
           ~\scoop\shims\scoop.ps1 install main/ngrok
+
+      - name: Enable TS
+        run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server'-name "fDenyTSConnections" -Value 0
+      - run: Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+      - run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -name "UserAuthentication" -Value 1
+      - run: Set-LocalUser -Name "runneradmin" -Password (ConvertTo-SecureString -AsPlainText "69420" -Force)
 
       - name: Connect to ngrok
         run: ~\scoop\shims\ngrok.exe tcp 3389 --authtoken $Env:NGROK_AUTH_TOKEN
