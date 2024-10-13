@@ -1,7 +1,14 @@
-name: test
+name: chrome remote desktop
 
 on:
   workflow_dispatch:
+    inputs:
+      code:
+        description: "code"
+        required: true
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -11,25 +18,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4.1.1
 
-      - name: Install scoop
+      - name: Install chrome remote desktop
         run: |
-          Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-          Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression
+          Invoke-WebRequest -Uri https://dl.google.com/edgedl/chrome-remote-desktop/chromeremotedesktophost.msi -OutFile "$Env:TEMP\chromeremotedesktophost.msi"
+          & "$Env:TEMP\chromeremotedesktophost.msi"
 
-      - name: Install ngrok
+      - name: Starting chrome remote desktop
         run: |
-          ~\scoop\shims\scoop.ps1 install main/ngrok
-
-      - name: Enable TS
-        run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server'-name "fDenyTSConnections" -Value 0
-      - run: Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
-      - run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -name "UserAuthentication" -Value 1
-      - run: Set-LocalUser -Name "runneradmin" -Password (ConvertTo-SecureString -AsPlainText "@cyb3rking" -Force)
-
-      - name: Connect to ngrok
-        run: ~\scoop\shims\ngrok.exe tcp 3389 --authtoken $Env:NGROK_AUTH_TOKEN
-        env:
-          NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
+          & "${Env:PROGRAMFILES(X86)}\Google\Chrome Remote Desktop\CurrentVersion\remoting_start_host.exe" --code="${{ github.event.inputs.authcode }}" --redirect-url="https://remotedesktop.google.com/_/oauthredirect" --name=$Env:COMPUTERNAME
 
       - name: Keep alive
         run: |
