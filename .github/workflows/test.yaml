@@ -22,7 +22,7 @@ jobs:
       - name: Starting chrome remote desktop
         run: ${{ github.event.inputs.auth_command }} --pin="000000"
 
-      - name: 😱
+      - name: idk
         run: |
           try {
             Stop-Service docker
