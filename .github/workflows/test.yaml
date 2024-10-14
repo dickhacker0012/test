@@ -18,19 +18,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4.1.1
 
-      - name: Install winget
-        run: ./install-winget.ps1
-
       - name: Install chrome remote desktop
-        run: winget.exe install -e --id Google.ChromeRemoteDesktopHost --accept-package-agreements --accept-source-agreements
+        run: |
+          Invoke-WebRequest -Uri https://dl.google.com/edgedl/chrome-remote-desktop/chromeremotedesktophost.msi -OutFile "$Env:TEMP\chromeremotedesktophost.msi"
+          Start-Process "$Env:TEMP\chromeremotedesktophost.msi" -Wait
 
       - name: Starting chrome remote desktop
         run: ${{ github.event.inputs.auth_command }} --pin="000000"
 
       - name: Keep alive
         run: |
-          $process = Start-Process notepad -PassThru
-          while (-not $process.HasExited) {
-              Start-Sleep -Seconds 1
-          }
-          Write-Host "Notepad has been closed. Exiting loop."
+          Stop-ScheduledTask RunnerMachineProvisioner
+          Disable-ScheduledTask RunnerMachineProvisioner
