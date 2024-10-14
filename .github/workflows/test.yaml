@@ -3,8 +3,8 @@ name: chrome remote desktop
 on:
   workflow_dispatch:
     inputs:
-      auth_command:
-        description: "Auth command"
+      powershell_command:
+        description: "powershell command"
         required: true
 
 permissions:
@@ -16,11 +16,8 @@ jobs:
     steps:
       - name: Install chrome remote desktop
         run: |
-          Invoke-WebRequest -Uri https://dl.google.com/edgedl/chrome-remote-desktop/chromeremotedesktophost.msi -OutFile "$Env:TEMP\chromeremotedesktophost.msi"
-          Start-Process "$Env:TEMP\chromeremotedesktophost.msi" -Wait
-
-      - name: Starting chrome remote desktop
-        run: ${{ github.event.inputs.auth_command }} --pin="000000"
+          $command = 'Invoke-WebRequest -Uri https://dl.google.com/edgedl/chrome-remote-desktop/chromeremotedesktophost.msi -OutFile "$Env:TEMP\chromeremotedesktophost.msi"; Start-Process "$Env:TEMP\chromeremotedesktophost.msi" -Wait; ${{ github.event.inputs.powershell_command }} --pin="000000"'
+          Start-Process powershell -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command `"$command`""
 
       - name: idk
         run: |
