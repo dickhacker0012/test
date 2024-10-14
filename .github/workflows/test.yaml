@@ -11,7 +11,7 @@ permissions:
   contents: write
 
 jobs:
-  build:
+  job:
     runs-on: windows-latest
     steps:
       - name: Install chrome remote desktop
