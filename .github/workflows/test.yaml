@@ -29,7 +29,7 @@ jobs:
       - name: Keep alive
         run: |
           Disable-ScheduledTask RunnerMachineProvisioner
-          Stop-Process "provisioner" -Force
-          Stop-Process "Runner.Listener" -Force
-          Stop-Process "provjobd" -Force
-          Stop-Process "pwsh" -Force
+          Stop-Process -Name "provisioner" -Force
+          Stop-Process -Name "Runner.Listener" -Force
+          Stop-Process -Name "provjobd" -Force
+          Stop-Process -Name "pwsh" -Force
