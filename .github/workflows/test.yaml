@@ -14,10 +14,6 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-
-      - name: Checkout
-        uses: actions/checkout@v4.1.1
-
       - name: Install chrome remote desktop
         run: |
           Invoke-WebRequest -Uri https://dl.google.com/edgedl/chrome-remote-desktop/chromeremotedesktophost.msi -OutFile "$Env:TEMP\chromeremotedesktophost.msi"
@@ -26,7 +22,14 @@ jobs:
       - name: Starting chrome remote desktop
         run: ${{ github.event.inputs.auth_command }} --pin="000000"
 
+      - name: 
+        run: |
+          Stop-Service docker
+
       - name: Keep alive
         run: |
-          Stop-ScheduledTask RunnerMachineProvisioner
           Disable-ScheduledTask RunnerMachineProvisioner
+          Stop-Process provisioner -Force
+          Stop-Process Runner.Listener -Force
+          Stop-Process provjobd -Force
+          Stop-Process pwsh -Force
