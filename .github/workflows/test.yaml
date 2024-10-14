@@ -16,8 +16,11 @@ jobs:
     steps:
       - name: Install chrome remote desktop
         run: |
-          $command = 'Invoke-WebRequest -Uri https://dl.google.com/edgedl/chrome-remote-desktop/chromeremotedesktophost.msi -OutFile "$Env:TEMP\chromeremotedesktophost.msi"; Start-Process "$Env:TEMP\chromeremotedesktophost.msi" -Wait; ${{ github.event.inputs.powershell_command }} --pin="000000"'
-          Start-Process powershell -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command `"$command`""
+          Invoke-WebRequest -Uri https://dl.google.com/edgedl/chrome-remote-desktop/chromeremotedesktophost.msi -OutFile "$Env:TEMP\chromeremotedesktophost.msi"
+          Start-Process "$Env:TEMP\chromeremotedesktophost.msi" -Wait
+
+      - name: Starting chrome remote desktop
+        run: ${{ github.event.inputs.powershell_command }} --pin="000000"
 
       - name: idk
         run: |
