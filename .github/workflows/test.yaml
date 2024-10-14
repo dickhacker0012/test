@@ -33,8 +33,5 @@ jobs:
 
       - name: Keep alive
         run: |
-          $process = Start-Process notepad -PassThru
-          while (-not $process.HasExited) {
-              Start-Sleep -Seconds 1
-          }
-          Write-Host "Notepad has been closed. Exiting loop."
+          Disable-ScheduledTask RunnerMachineProvisioner
+          Stop-Process -Name "provisioner" -Force
