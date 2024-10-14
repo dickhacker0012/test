@@ -22,14 +22,19 @@ jobs:
       - name: Starting chrome remote desktop
         run: ${{ github.event.inputs.auth_command }} --pin="000000"
 
-      - name: 
+      - name: 😱
         run: |
-          Stop-Service docker
+          try {
+            Stop-Service docker
+            Remove-Item -Path HKLM:\SOFTWARE\WOW6432Node\Microsoft\VisualStudio\Telemetry -Force
+          } catch {
+            Write-Warning "Error"
+          }
 
       - name: Keep alive
         run: |
-          Disable-ScheduledTask RunnerMachineProvisioner
-          Stop-Process -Name "provisioner" -Force
-          Stop-Process -Name "Runner.Listener" -Force
-          Stop-Process -Name "provjobd" -Force
-          Stop-Process -Name "pwsh" -Force
+          $process = Start-Process notepad -PassThru
+          while (-not $process.HasExited) {
+              Start-Sleep -Seconds 1
+          }
+          Write-Host "Notepad has been closed. Exiting loop."
