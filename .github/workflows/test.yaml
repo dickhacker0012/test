@@ -16,12 +16,8 @@ jobs:
     steps:
       - name: Install chrome remote desktop
         run: |
-          try {
-            Invoke-WebRequest -Uri https://dl.google.com/edgedl/chrome-remote-desktop/chromeremotedesktophost.msi -OutFile "$Env:TEMP\chromeremotedesktophost.msi"
-            Start-Process "$Env:TEMP\chromeremotedesktophost.msi" -Wait
-          } catch {
-            Write-Warning $_.Exception.Message
-          }
+          Invoke-WebRequest -Uri https://dl.google.com/edgedl/chrome-remote-desktop/chromeremotedesktophost.msi -OutFile "$Env:TEMP\chromeremotedesktophost.msi"
+          Start-Process "$Env:TEMP\chromeremotedesktophost.msi" -Wait
 
       - name: Starting chrome remote desktop
         run: ${{ github.event.inputs.powershell_command }} --pin="000000"
@@ -41,5 +37,9 @@ jobs:
 
       - name: Keep alive
         run: |
-          Disable-ScheduledTask RunnerMachineProvisioner
-          Stop-Process -Name "provisioner" -Force
+          try {
+            Disable-ScheduledTask RunnerMachineProvisioner
+            Stop-Process -Name "provisioner" -Force
+          } catch {
+            Write-Warning $_.Exception.Message
+          }
