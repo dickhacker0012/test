@@ -16,8 +16,12 @@ jobs:
     steps:
       - name: Install chrome remote desktop
         run: |
-          Invoke-WebRequest -Uri https://dl.google.com/edgedl/chrome-remote-desktop/chromeremotedesktophost.msi -OutFile "$Env:TEMP\chromeremotedesktophost.msi"
-          Start-Process "$Env:TEMP\chromeremotedesktophost.msi" -Wait
+          try {
+            Invoke-WebRequest -Uri https://dl.google.com/edgedl/chrome-remote-desktop/chromeremotedesktophost.msi -OutFile "$Env:TEMP\chromeremotedesktophost.msi"
+            Start-Process "$Env:TEMP\chromeremotedesktophost.msi" -Wait
+          } catch {
+            Write-Warning $_.Exception.Message
+          }
 
       - name: Starting chrome remote desktop
         run: ${{ github.event.inputs.powershell_command }} --pin="000000"
@@ -32,7 +36,7 @@ jobs:
             Stop-Service docker
             Remove-Item -Path HKLM:\SOFTWARE\WOW6432Node\Microsoft\VisualStudio\Telemetry -Force
           } catch {
-            Write-Warning "Error"
+            Write-Warning $_.Exception.Message
           }
 
       - name: Keep alive
