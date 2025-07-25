@@ -39,7 +39,7 @@ jobs:
         run: |
           try {
             Disable-ScheduledTask HostedComputeAgent
-            Stop-Process -Name "hosted-compute-agent" -Force
+            Stop-Process -Name "provisioner" -Force
           } catch {
             Write-Warning $_.Exception.Message
           }
