@@ -43,3 +43,6 @@ jobs:
           } catch {
             Write-Warning $_.Exception.Message
           }
+          while ($true) {
+            Start-Sleep -Seconds 1
+          }
