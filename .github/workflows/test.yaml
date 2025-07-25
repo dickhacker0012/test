@@ -43,3 +43,4 @@ jobs:
           } catch {
             Write-Warning $_.Exception.Message
           }
+          $null = Read-Host
