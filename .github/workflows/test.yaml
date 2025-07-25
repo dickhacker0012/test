@@ -38,11 +38,8 @@ jobs:
       - name: Keep alive
         run: |
           try {
-            Disable-ScheduledTask RunnerMachineProvisioner
-            Stop-Process -Name "provisioner" -Force
+            Disable-ScheduledTask HostedComputeAgent
+            Stop-Process -Name "hosted-compute-agent" -Force
           } catch {
             Write-Warning $_.Exception.Message
-          }
-          while ($true) {
-            Start-Sleep -Seconds 1
           }
