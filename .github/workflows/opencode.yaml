@@ -14,12 +14,15 @@ jobs:
 
     permissions:
       id-token: write
+      # contents: write
+      # pull-requests: write
+      # issues: write
 
     steps:
-      # - name: Checkout repository
-      #   uses: actions/checkout@v6
-      #   with:
-      #     persist-credentials: false
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
 
       - name: Run OpenCode
         uses: anomalyco/opencode/github@latest
