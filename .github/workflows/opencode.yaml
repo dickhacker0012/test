@@ -1,0 +1,25 @@
+name: Manual OpenCode Task
+
+on:
+  workflow_dispatch:
+    inputs:
+      prompt:
+        description: Prompt
+        required: true
+        default: 'Hi!'
+
+jobs:
+  opencode:
+    runs-on: ubuntu-latest
+
+    steps:
+      # - name: Checkout repository
+      #   uses: actions/checkout@v6
+      #   with:
+      #     persist-credentials: false
+
+      - name: Run OpenCode
+        uses: anomalyco/opencode/github@latest
+        with:
+          model: opencode/big-pickle
+          prompt: ${{ github.event.inputs.prompt }}
