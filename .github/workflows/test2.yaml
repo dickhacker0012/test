@@ -9,4 +9,7 @@ jobs:
 
     steps:
       - name: Bash
-        run: tar --version
+        run: |
+          # tar --version
+          curl -L "https://dbaeumer.gallery.vsassets.io/_apis/public/gallery/publisher/dbaeumer/extension/vscode-eslint/3.0.24/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage" -o eslint.vsix
+          tar -xvf eslint.vsix
