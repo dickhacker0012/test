@@ -27,5 +27,13 @@ jobs:
       - name: Run OpenCode
         uses: anomalyco/opencode/github@latest
         with:
-          model: opencode/big-pickle
+          model: opencode/deepseek-v4-flash-free
           prompt: ${{ github.event.inputs.prompt }}
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: artifact
+          path: /tmp/artifact/*
+          if-no-files-found: ignore
+          retention-days: 7
